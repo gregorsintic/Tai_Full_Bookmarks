@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/settings_id"
+        android:title="@string/title_settings"
+        android:showAsAction="always"
+        app:showAsAction="always"
+
+        />
+
+    <item
+        android:id="@+id/help_id"
+        android:icon="@mipmap/ic_help"
+        android:title="@string/title_help"
+        android:showAsAction="always"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/refresh_id"
+        android:icon="@mipmap/ic_refresh"
+        android:title="@string/title_refresh"
+        android:showAsAction="always"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/share_id"
+        android:icon="@mipmap/ic_share"
+        android:title="@string/title_share"
+        android:showAsAction="never"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/rate_id"
+        android:icon="@mipmap/ic_rate"
+        android:title="@string/title_rate_us"
+        android:showAsAction="never"
+        app:showAsAction="never"
+
+        />
+    <item
+        android:id="@+id/about_us_id"
+        android:icon="@mipmap/ic_info"
+        android:title="@string/title_about_us"
+        android:showAsAction="never"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/about_app_id"
+        android:icon="@mipmap/ic_info"
+        android:title="@string/title_about_app"
+        android:showAsAction="never"
+        app:showAsAction="never"
+        />
+</menu>
+
