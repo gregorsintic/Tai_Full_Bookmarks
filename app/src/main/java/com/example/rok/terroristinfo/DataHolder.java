@@ -37,6 +37,7 @@ public final class DataHolder {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 data[i] = new Data(
+                        jsonObject.getInt("id"),
                         (float)jsonObject.getInt("lat"), (float)jsonObject.getInt("lng"),
                         jsonObject.getString("icon"),
                         jsonObject.getString("location"),
@@ -69,7 +70,7 @@ public final class DataHolder {
     }
 
     public static void setDataFromInternalStorage(Context context) {
-        File file           = new File(context.getFilesDir(), FILENAME);
+        /*File file           = new File(context.getFilesDir(), FILENAME);
         String stringData   = "";
         FileInputStream fis = null;
 
@@ -90,12 +91,28 @@ public final class DataHolder {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            try {
-                fis.close();
-            } catch (IOException e){
-                e.printStackTrace();
+            if (fis != null){
+                try {
+                    fis.close();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
             }
+
         }
+        ////////////////////////////
+        tring("icon"),
+                        jsonObject.getString("location"),
+                        jsonObject.getString("briefSummary"),
+                        jsonObject.getString("eventInfo"),
+                        jsonObject.getString("weekDay"),
+                        jsonObject.getString("month"),
+                        jsonObject.getInt("day"),
+                        jsonObject.getString("year"),
+                        jsonObject.getInt("notify"),
+                        jsonObject.getString("eventType"),
+                        jsonObject.getInt("mainEvent")*/
+        String stringData = "[{\"id\":1,\"lat\":30.186,\"lng\":66.9989,\"icon\":\"ak_red\",\"location\":\"Quetta, Balochistan, Pakistan\",\"briefSummary\":\"Suicide attack, Automatic Rifle and explosives used. 80+ killed, 120+ injured. Islamic state claimed responsibility.\",\"eventInfo\":\"On 8 August 2016, terrorists attacked the Government Hospital of Quetta in Pakistan with a suicide bombing and shooting. They killed around 80 people (mainly lawyers). Responsibility for the attack has been initially claimed by Islamic state (ISIS). However, Jamaat-ul-Ahrar also claimed credit for thr attack.\",\"time\":\"10:00\",\"weekDay\":\"Monday\",\"month\":\"August\",\"day\":8,\"year\":2016,\"notify\":0,\"eventType\":\"rifleAssault\",\"mainEvent\":1},{\"id\":5,\"lat\":49.3828,\"lng\":1.10672,\"icon\":\"hostage_black\",\"location\":\"Saint-Étienne-du-Rouvray, Norm\",\"briefSummary\":\"Two Islamist terrorists took six people captive and later slit throat of one of them (85 year old priest). The terrorist were later shot dead by police.\",\"eventInfo\":\"At about 9.45, two men wielding knives, handgun and fake explosive belts entered church as Mass was being held. Priest, three nuns and two parishioners were taken hostage. The attackers forced the priest to kneel at the altar and then slit his throat while screaming 'Allahu akbar'. Parishioner was later knifed and left critically wounded (he survived). Other Hostages were unhurt. Police tried to negotiate with perpetrators - without success. Later they tried to run out of the church with hostages as human shield, but the police successfully eliminated them.\",\"time\":\"09:45\",\"weekDay\":\"Tuesday\",\"month\":\"July\",\"day\":26,\"year\":2016,\"notify\":0,\"eventType\":\"hostageSituation\",\"mainEvent\":1}] ";
 
         setData(stringData);
     }

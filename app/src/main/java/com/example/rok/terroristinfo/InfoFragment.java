@@ -1,28 +1,33 @@
 package com.example.rok.terroristinfo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.vision.text.Line;
+import com.google.android.gms.common.SignInButton;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 
 public class InfoFragment extends Fragment {
     private SharedPreferencesInit spi;
@@ -58,7 +63,7 @@ public class InfoFragment extends Fragment {
     private void populateFragment(View view) {
         if (view == null) { return; }
 
-        Data[] data = DataHolder.getData();
+        final Data[] data = DataHolder.getData();
 
         // do nothing if there is no data
         if (data == null) { return; }
@@ -74,10 +79,10 @@ public class InfoFragment extends Fragment {
         // check if user wants main events only (forget that for now)
         //boolean mainEventsOnly = spi.getMainEventBool();
 
-        //TODO please, this is horrible
-        for (int i = 0; i < data.length; i++) {
-            Date eventDate = data[i].getDate();
 
+        for ( int i = 0; i < data.length; i++) {
+            Date eventDate = data[i].getDate();
+            final int index = i;
             Date calendarEventDate = dateMinusAge(eventDate, 0);
 
             if (selections != null && selections.contains(data[i].getEventType()) && calendarEventDate.compareTo(oldest) >= 0) {
@@ -90,6 +95,9 @@ public class InfoFragment extends Fragment {
                 layouts.put(i, mainLayout);
                 drawBorder(mainLayout);
 
+                LinearLayout icon_bookmark_layout = new LinearLayout(getContext());
+                icon_bookmark_layout.setOrientation(LinearLayout.VERTICAL);
+                icon_bookmark_layout.setPadding(5, 10, 5, 10);
 
                 //for title and text
                 LinearLayout verticalLayout = new LinearLayout(getContext());
@@ -123,18 +131,78 @@ public class InfoFragment extends Fragment {
                 onClickListener(icon, mainLayout.getId());
 
 
-                mainLayout.addView(icon);
 
+                final TextView bookmarkIconButton = new TextView(getContext());
+                if (getFavoriteState() == true){
+                    //todo try to get current state and draw correct star icon if state is set to false in bookmarks activity
+                    bookmarkIconButton.setBackgroundResource(R.drawable.ic_bookmarked_true);
+                    //Toast.makeText(getContext(),"works!",Toast.LENGTH_LONG).show();
+                }else{
+                    bookmarkIconButton.setBackgroundResource(R.drawable.ic_bookmarked_false);
+                }
+
+                bookmarkIconButton.setOnClickListener(new View.OnClickListener() {
+
+
+                    //String location = data[i].getLocation();
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            boolean isFavourite = getFavoriteState();
+
+                            if (isFavourite) {
+                                bookmarkIconButton.setBackgroundResource(R.drawable.ic_bookmarked_true);
+                                isFavourite = false;
+                                saveFavoriteState(isFavourite);
+                                BookmarksDB db = new BookmarksDB(getContext());
+                                db.addBookmark(data[index].getId(),data[index].getLocation(),data[index].getStringDate(data[index].getDate()), data[index].getEventInfo(),data[index].getIcon());
+
+                            } else {
+                                bookmarkIconButton.setBackgroundResource(R.drawable.ic_bookmarked_false);
+                                isFavourite = true;
+                                saveFavoriteState(isFavourite);
+                                BookmarksDB db = new BookmarksDB(getContext());
+                                db.deleteBookmark(data[index].getId());
+
+                            }
+
+                        }catch (Exception e){
+                            Log.e("Inserting to database..", "Inserting failed", e);
+                        }
+
+
+                    }
+                });
+
+                icon_bookmark_layout.addView(icon);
+                icon_bookmark_layout.addView(bookmarkIconButton);
+                mainLayout.addView(icon_bookmark_layout);
+                //mainLayout.addView(bookmarkIconButton);
                 verticalLayout.addView(title);
                 verticalLayout.addView(date);
                 verticalLayout.addView(text);
-
+                //verticalLayout.addView(bookmarkIconButton);
                 mainLayout.addView(verticalLayout);
 
                 rootLayout.addView(mainLayout);
             }
         }
     }
+    private void saveFavoriteState(boolean isFavourite) {
+        SharedPreferences aSharedPreferenes = getContext().getSharedPreferences(
+                "Favourite", Context.MODE_PRIVATE);
+        SharedPreferences.Editor aSharedPreferenesEdit = aSharedPreferenes
+                .edit();
+        aSharedPreferenesEdit.putBoolean("State", isFavourite);
+        aSharedPreferenesEdit.commit();
+    }
+
+    private boolean getFavoriteState() {
+        SharedPreferences aSharedPreferenes = getContext().getSharedPreferences(
+                "Favourite", Context.MODE_PRIVATE);
+        return aSharedPreferenes.getBoolean("State", true);
+    }
+
 
     private void drawBorder(LinearLayout linLayout) {
         GradientDrawable border = new GradientDrawable();

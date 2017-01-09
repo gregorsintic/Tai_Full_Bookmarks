@@ -1,57 +1,120 @@
 package com.example.rok.terroristinfo;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-public class Data {
-    private int     id;
-    private float   lat;
-    private float   lng;
-    private String  icon;
-    private String  location;
-    private String  briefSummary;
-    private String  eventInfo;
-    private Date    date;
-    private int     day;
-    private int     notify;
-    private String  eventType;
-    private int     mainEventsOnly;
+import android.app.Activity;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+import java.util.HashMap;
 
 
-    public Data(int id,float lat, float lng, String icon, String location, String briefSummary, String eventInfo,
-                String dayName, String month, int day, String year, int notify, String eventType, int mainEventsOnly) {
-        this.id             = id;
-        this.lat            = lat;
-        this.lng            = lng;
-        this.icon           = icon;
-        this.location       = location;
-        this.briefSummary   = briefSummary;
-        this.eventInfo      = eventInfo;
-        this.day            = day;
-        this.notify         = notify;
-        this.eventType      = eventType;
-        this.mainEventsOnly = mainEventsOnly;
+public class Bookmarks extends Activity {
 
-        String sDate = dayName + ", " + month + " " + day + " " + year;
-        //             Wednesday, July 16th, 2016
+    private HashMap<Integer, LinearLayout> items = new HashMap<>();
 
-        DateFormat df = new SimpleDateFormat("EEEE, MMMM dd yyyy", Locale.US);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.bookmarks_view);
+        View view = findViewById(R.id.linearLayoutBookmarks);
 
         try {
-            this.date = df.parse(sDate);
-        } catch (ParseException e) {
-            //display current date if it fails to parse given parameters. This will not happen probably.
-            this.date = new Date();
+            listBookmarks(view);
+        } catch (Exception e) {
+            Toast.makeText(this, "Trouble...", Toast.LENGTH_LONG).show();
         }
-
     }
 
-    public String getStringDate(Date date) {
-        DateFormat df = new SimpleDateFormat("EEEE, MMMM dd'%s' yyyy", Locale.US);
-        return String.format(df.format(date), getSuffix(day));
+    private void listBookmarks(View view) {
+        LinearLayout rootLayout = (LinearLayout) view.findViewById(R.id.linearLayoutBookmarks);
+
+        BookmarksDB db = new BookmarksDB(this);
+        Cursor cursor = db.getAllBookmarks();
+
+        if (cursor != null) {
+            int i = 0;
+            if (cursor.moveToFirst()) {
+                do {
+
+                    LinearLayout mainLayout = new LinearLayout(this);
+                    mainLayout.setPadding(5, 10, 5, 10);
+                    mainLayout.setClickable(true);
+
+                    mainLayout.setId(i);
+                    items.put(i, mainLayout);
+                    drawBorder(mainLayout);
+
+
+                    //for title and text
+                    LinearLayout verticalLayout = new LinearLayout(this);
+                    verticalLayout.setOrientation(LinearLayout.VERTICAL);
+                    verticalLayout.setPadding(12, 0, 0, 0);
+
+                    String location = cursor.getString(cursor.getColumnIndex("location"));
+                    String date = cursor.getString(cursor.getColumnIndex("date"));
+                    String summary = cursor.getString(cursor.getColumnIndex("summary"));
+                    String icon = cursor.getString(cursor.getColumnIndex("icon"));
+
+
+                    TextView tv_location = new TextView(this);
+                    tv_location.setTextSize(19);
+                    tv_location.setTextColor(Color.DKGRAY);
+                    tv_location.setText(location);
+
+                    //DATE
+                    TextView tv_date = new TextView(this);
+                    tv_date.setTextSize(15);
+                    tv_date.setTextColor(Color.DKGRAY);
+                    tv_date.setText(date);
+
+                    //TEXT
+                    ExpandableTextView etv_summary = new ExpandableTextView(this);
+                    etv_summary.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT));
+                    etv_summary.setTextSize(13);
+                    etv_summary.setText('\n' + summary);
+                    etv_summary.makeExpandable(5);
+
+
+                    //ICON
+                    TextView tv_icon = new TextView(this);
+                    tv_icon.setCompoundDrawablesWithIntrinsicBounds(getIconFromString(icon), 0, 0, 0);
+
+                    mainLayout.addView(tv_icon);
+                    verticalLayout.addView(tv_location);
+                    verticalLayout.addView(tv_date);
+                    verticalLayout.addView(etv_summary);
+
+                    mainLayout.addView(verticalLayout);
+
+                    rootLayout.addView(mainLayout);
+
+
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+        } else {
+            Toast.makeText(this, "Database problems...", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
+    }
+    private void drawBorder(LinearLayout linLayout) {
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(0xEDEDEDFF);
+        border.setStroke(3, 0x6B6B6BFF); //black border with full opacity
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            linLayout.setBackgroundDrawable(border);
+        } else {
+            linLayout.setBackground(border);
+        }
     }
 
     public int getIconFromString(String icon) {
@@ -222,64 +285,6 @@ public class Data {
         }
     }
 
-    private String getSuffix(int day) {
-        if (day >= 11 && day <= 13) { return "th"; }
 
-        switch (day % 10) {
-            case 1:
-                return "st";
-            case 2:
-                return "nd";
-            case 3:
-                return "rd";
-            default:
-                return "th";
-        }
-    }
-
-    //GETTERS
-
-    public int getId(){ return id; }
-    public float getLat() {
-        return lat;
-    }
-
-    public float getLng() {
-        return lng;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getBriefSummary() {
-        return briefSummary;
-    }
-
-    public String getEventInfo() {
-        return eventInfo;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public int getNotify() { return notify; }
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public int getMainEventsOnly() {
-        return mainEventsOnly;
-    }
-    //SETTERS
-    public void setNotify(int notify) {
-        this.notify = notify;
-    }
 
 }

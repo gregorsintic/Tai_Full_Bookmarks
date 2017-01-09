@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(help);
                 break;
 
+            case R.id.bookmarks_id:
+                Intent bookmarks = new Intent("android.intent.action.BOOKMARKS");
+                startActivity(bookmarks);
+                break;
+
             case R.id.about_us_id:
                 Intent aboutUs = new Intent("android.intent.action.ABOUT");
                 startActivity(aboutUs);
@@ -99,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setTabs() {
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
+         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         viewPager.setAdapter(new FragPagerAdapter(getSupportFragmentManager(),

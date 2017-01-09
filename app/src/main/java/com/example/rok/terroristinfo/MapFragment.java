@@ -77,7 +77,6 @@ public class MapFragment extends Fragment {
                 setMarkers(mMap);
 
                 changeType(spi.getPrefsString("listMapType", "normal"));
-
             }
         });
 
@@ -169,12 +168,12 @@ public class MapFragment extends Fragment {
 
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter(){
 
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
 
-            @Override
+                @Override
             public View getInfoContents(Marker marker) {
                 View v = getActivity().getLayoutInflater().inflate(R.layout.info_window_view, null);
                 TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);

@@ -5,6 +5,7 @@
     <string name="title_activity_maps">TAi</string>
     <string name="title_launch">Terror Attack Info</string>
     <string name="title_settings">Settings</string>
+    <string name="title_bookmarks">Bookmarks</string>
     <string name="title_about_us">About Us</string>
     <string name="title_rate_us">Rate Us</string>
     <string name="title_about_app">About This App</string>
@@ -24,8 +25,8 @@
     <string name="help_icon_color">Icon\'s color represents specific group that caused the event shown in Map or Info tab.</string>
     <string name="help_icon_type">Meaning of icons</string>
 
-    <string name="about">"I'm Rok Dolinar and I come from Slovenia. I\'m 21 years old and I am studying computer science in Ljubljana - Faculty of Computer and Information science. This is my first android app, so it is nowhere close to being perfect. However, you can help me with that. I will gladly read any suggestion, complaint or commendation on:"</string>
-    <string name="about_thanks">Special thanks to guys at: https://design.google.com/icons (for providing beautiful icons I used for ActionBar icons, Launcher icon…) and admins of LiveUAMap (http://liveuamap.com/) for letting me use icons I used for displaying events. I would also like to thank anyone that helped me create this app (Zak).</string>
+    <string name="about">"Rok Dolinar and Gregor Sintič.\nWe are students of computer science in Ljubljana - Faculty of Computer and Information science. This is our project for EMP class."</string>
+    <string name="about_thanks">Special thanks to guys at: https://design.google.com/icons (for providing beautiful icons we used for ActionBar icons, Launcher icon…) and admins of LiveUAMap (http://liveuamap.com/) for letting us use icons we used for displaying events.</string>
     <string name="about_app_help">For quick help, click on the question mark above this window.</string>
     <string name="about_app">This application shows terror and terrorist attacks performed by different terrorist groups and individuals. Terrorism is becoming a huge topical issue and it is only getting worse with each year. This application will inform you (and notify, if you want to) about everything you need to know about events happening around you. It will cover everything - shootings, suicide attacks, hostage situations, police interventions and even stuff like video content, twitter statements from the government and more.</string>
 
@@ -40,5 +41,7 @@
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="admob_interstitial_id">ca-app-pub-3940256099942544/1033173712</string>
+
+    <string name="bookmarksHelloString">Here is a list of events you bookmarked: </string>
 </resources>
 

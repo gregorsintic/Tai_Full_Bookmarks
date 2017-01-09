@@ -83,6 +83,7 @@ public class RequestNotifyTask extends AsyncTask<String, String, String> {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 data[i] = new Data(
+                        jsonObject.getInt("id"),
                         (float)jsonObject.getInt("lat"), (float)jsonObject.getInt("lng"),
                         jsonObject.getString("icon"),
                         jsonObject.getString("location"),

@@ -22,10 +22,7 @@ public class SharedPreferencesInit {
         return prefs.getString(key, def);
     }
 
-    /* forget that for now
-    protected boolean getMainEventBool() {
-        return prefs.getBoolean("mainEventsCheckbox", false);
-    }*/
+
 
     protected int getTextViewID() {
         return prefs.getInt("text_id", -1);
